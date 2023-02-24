@@ -369,7 +369,7 @@ window.addEventListener('resize', resizeCanvas, false);
 
 function resizeCanvas() {
   canvas.width = window.innerWidth / 2;
-  canvas.height = window.innerHeight / 2 ;
+  canvas.height = window.innerHeight / 2;
   canvas.style.width = window.innerWidth + 'px';
   canvas.style.height = window.innerHeight + 'px';
   let density = 1;
@@ -387,6 +387,7 @@ let activeSlide = 1;
 let slideChangedAt = 0.0;
 let slideChangeDirection = 1;
 const slideCount = document.getElementsByClassName('slide').length;
+const glslideCount = document.getElementsByClassName('glslide').length;
 
 // WebGL main loop
 
@@ -454,38 +455,66 @@ function webglSlideChange(direction) {
   }
 }
 
+function leftArrowPressed() {
+  if (activeSlide === slideCount + 1) {
+    hideWebGL();
+    hide(activeSlide);
+    webglSlideChange(-1);
+    show(activeSlide);
+  } else if (activeSlide > slideCount + 1) {
+    hide(activeSlide);
+    webglSlideChange(-1);
+    show(activeSlide);
+  } else if (activeSlide > 1) {
+    hide(activeSlide);
+    webglSlideChange(-1);
+    show(activeSlide);
+  }
+}
+
+function rightArrowPressed() {
+  if (activeSlide > slideCount + glslideCount) {
+    return;
+  }
+  if (activeSlide === slideCount) {
+    hide(activeSlide);
+    webglSlideChange(1);
+    showWebGL();
+    show(activeSlide);
+  } else if (activeSlide > slideCount) {
+    hide(activeSlide);
+    webglSlideChange(1);
+    show(activeSlide);
+  } else if (activeSlide < slideCount) {
+    hide(activeSlide);
+    webglSlideChange(1);
+    show(activeSlide);
+  }
+}
+
 document.addEventListener('keydown', function (event) {
   if (event.key === 'ArrowLeft') {
-    if (activeSlide === slideCount + 1) {
-      hideWebGL();
-      hide(activeSlide);
-      webglSlideChange(-1);
-      show(activeSlide);
-    } else if (activeSlide > slideCount + 1) {
-      hide(activeSlide);
-      webglSlideChange(-1);
-      show(activeSlide);
-    } else if (activeSlide > 1) {
-      hide(activeSlide);
-      webglSlideChange(-1);
-      show(activeSlide);
-    }
+    leftArrowPressed();
   } else if (event.key === 'ArrowRight') {
-    if (activeSlide === slideCount) {
-      hide(activeSlide);
-      webglSlideChange(1);
-      showWebGL();
-      show(activeSlide);
-    } else if (activeSlide > slideCount) {
-      hide(activeSlide);
-      webglSlideChange(1);
-      show(activeSlide);
-    } else if (activeSlide < slideCount) {
-      hide(activeSlide);
-      webglSlideChange(1);
-      show(activeSlide);
-    }
+    rightArrowPressed();
   }
+});
+
+// call rightArrowPressed() when user swipes right
+document.addEventListener('swiped-right', function (e) {
+  rightArrowPressed();
+});
+// call leftArrowPressed() when user swipes left
+document.addEventListener('swiped-left', function (e) {
+  leftArrowPressed();
+});
+// call rightArrowPressed() when user clicks
+document.addEventListener('click', function (e) {
+  // except when clicking on a link
+  if (e.target.tagName === 'A') {
+    return;
+  }
+  rightArrowPressed();
 });
 
 // Show first slide
