@@ -1,0 +1,116 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: rgba(204, 239, 255, 1.0);
+  font-family: 'Roboto', sans-serif;
+}
+
+.glslide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: transparent;
+  color: #333;
+  font-size: 1.5rem;
+  /* text-align: center; */
+  transition: all 0.5s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.light {
+  background-color: rgba(0.0, 0.0, 0.0, 0.5);
+  color: white;
+}
+
+.slidebgcolor {
+  background-color: rgba(204, 239, 255, 0.5);
+  color: black;
+  text-align:center;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: rgba(204, 239, 255, 1.0);
+  color: #333;
+  font-size: 1.5rem;
+  text-align: center;
+  transition: all 0.5s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.slide video, img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.slide img {
+  max-width: 60%;
+  max-height: 60%;
+}
+
+.slide h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.slide h2 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.slide h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.slide h4 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.slide h5 {
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.slide h6 {
+  font-size: 0.5rem;
+  margin: 0;
+}
+
+.slide p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.slide a {
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+}
+
+.slide a:hover {
+  color: #666;
+  text-decoration: none;
+  border-bottom: 1px solid #333;
+}
+
+#canvas {
+  display: none;
+}

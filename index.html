@@ -1,0 +1,255 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>If Bob Ross would've had a GPU</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <!-- Roboto Font -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div id="slide-1" class="slide">
+    <img src="img/bob.webp" alt="Bob Ross">
+    <h1>If Bob Ross would've had a GPU</h1>
+  </div>
+
+  <div id="slide-2" class="slide">
+    <img src="img/bear.jpg" alt="Teddy Bear">
+    <h1>My early attempts in computer graphics</h1>
+  </div>
+
+  <div id="slide-3" class="slide">
+    <video loop muted playsinline>
+      <source src="img/elevated.webm" type="video/webm">
+    </video>
+    <h1><a href="https://www.youtube.com/watch?v=jB0vBmiTr6o">elevated by Rgba & TBC | 4k intro</a> (2009)</h1>
+  </div>
+
+  <div id="slide-4" class="slide">
+    <img src="img/backend.jpg" alt="Developer">
+    <h1>Stock photo of a happy backend developer</h1>
+  </div>
+
+  <div id="slide-5" class="slide">
+    <video loop muted playsinline>
+      <source src="img/rainforest.webm" type="video/webm">
+    </video>
+    <h1><a href="https://www.youtube.com/watch?v=BFld4EBO2RE">Painting a Landscape with Maths</a> (2022)</h1>
+  </div>
+
+  <div id="slide-6" class="slide">
+    <video loop muted playsinline>
+      <source src="img/girl.webm" type="video/webm">
+    </video>
+    <h1><a href="https://www.youtube.com/watch?v=8--5LwHRhjk">Painting a Character with Maths</a> (2020)</h1>
+  </div>
+
+  <div id="slide-7" class="slide">
+    <h1>These were made by the same guy!</h1>
+    <h1>Using the Raymarching SDFs (Signed Distance Fields) technique</h1>
+    <h3 style="padding-top: 2em">You can learn it too:</h3>
+    <ul>
+      <li><a href="https://www.shadertoy.com/">Shadertoy</a></li>
+      <li><a href="https://iquilezles.org/articles/function2009/">Behind "Elevated"</a></li>
+      <li><a href="https://iquilezles.org/articles/distfunctions/">Distance Functions</a></li>
+      <li><a href="https://webgl2fundamentals.org/webgl/lessons/webgl-shadertoy.html">WebGL2 Fundamentals</a></li>
+      <li><a href="https://thebookofshaders.com/">The Book of Shaders</a></li>
+    </ul>
+  </div>
+
+  <div id="slide-8" class="glslide">
+    <pre class="light">
+
+      vec3 rainbow = vec3(
+        0.5 + 0.5 * cos(time + gl_FragCoord.x / 500.0),
+        0.5 + 0.5 * sin(time + gl_FragCoord.y / 500.0),
+        0.5 + 0.5 * sin(time + gl_FragCoord.x / 500.0 + gl_FragCoord.y / 500.0)
+      );
+    </pre>
+  </div>
+
+  <div id="slide-9" class="glslide">
+    <pre>
+      float sdSphere( vec3 p, float s )
+      {
+        return length(p) - s;
+      }
+    </pre>
+  </div>
+
+  <div id="slide-10" class="glslide">
+    <pre>
+      float sdOctahedron( vec3 p, float s)
+      {
+          p = abs(p);
+          float m = p.x+p.y+p.z-s;
+          vec3 q;
+               if( 3.0*p.x < m ) q = p.xyz;
+          else if( 3.0*p.y < m ) q = p.yzx;
+          else if( 3.0*p.z < m ) q = p.zxy;
+          else return m*0.57735027;
+
+          float k = clamp(0.5*(q.z-q.y+s),0.0,s);
+          return length(vec3(q.x,q.y-s+k,q.z-k));
+      }
+    </pre>
+  </div>
+
+  <div id="slide-11" class="glslide">
+    <pre>
+      float sdTorus( vec3 p, vec2 t )
+      {
+        vec2 q = vec2(length(p.xz)-t.x,p.y);
+        return length(q)-t.y;
+      }
+    </pre>
+  </div>
+
+  <div id="slide-12" class="glslide">
+    <pre>
+      float opSmoothUnion( float d1, float d2, float k )
+      {
+        float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+        return mix( d2, d1, h ) - k*h*(1.0-h);
+      }
+
+      opSmoothUnion(torus, octahedron, 0.3);
+    </pre>
+  </div>
+
+  <div id="slide-13" class="glslide">
+    <pre>
+      float sdBox( vec3 p, vec3 b )
+      {
+        vec3 q = abs(p) - b;
+        return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
+      }
+    </pre>
+  </div>
+
+  <div id="slide-14" class="glslide">
+    <pre>
+      vec3 opRepLim( in vec3 p, in float c, in vec3 l, in sdf3d primitive )
+      {
+        vec3 q = p-c*clamp(round(p/c),-l,l);
+        return primitive( q );
+      }
+
+      opRepLim( pos, 2.0, vec3(1.0), box );
+    </pre>
+  </div>
+
+  <div id="slide-15" class="glslide">
+    <pre>
+      vec3 opRepLim( in vec3 p, in float c, in vec3 l, in sdf3d primitive )
+      {
+        vec3 q = p-c*clamp(round(p/c),-l,l);
+        return primitive( q );
+      }
+
+      opRepLim( pos, 2.0, vec3(2.0), box );
+    </pre>
+  </div>
+
+  <div id="slide-16" class="glslide">
+    <pre class="light">
+      float opRep( in vec3 p, in vec3 c, in sdf3d primitive )
+      {
+        vec3 q = mod(p+0.5*c,c)-0.5*c;
+        return primitive( q );
+      }
+
+      opRep( pos, vec3(2.0), box );
+    </pre>
+  </div>
+
+  <div id="slide-17" class="glslide">
+    <h1 class="slidebgcolor">Now draw something together</h1>
+  </div>
+
+  <div id="slide-18" class="glslide">
+    <pre>
+      float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
+    </pre>
+  </div>
+
+  <div id="slide-19" class="glslide">
+    <pre>
+      float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
+      float t2 = min(t1, sdTorus(pos.yxz, vec2(0.31, 0.01))); // union
+    </pre>
+  </div>
+
+  <div id="slide-20" class="glslide">
+    <pre>
+      float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
+      float t2 = min(t1, sdTorus(pos.yxz, vec2(0.31, 0.01))); // union
+      float t3 = min(t2, sdTorus(pos.yxz, vec2(0.34, 0.01))); // union
+    </pre>
+  </div>
+
+  <div id="slide-21" class="glslide">
+    <pre>
+      float line = sdBox(pos, vec3(0.01, 0.3, 0.01));
+    </pre>
+  </div>
+
+  <div id="slide-22" class="glslide">
+    <pre>
+      opRepLim( pos, 0.1, vec3(0.0, 0.0, 2.0), sdBox(pos, vec3(0.01, 0.3, 0.01) );
+    </pre>
+  </div>
+
+  <div id="slide-23" class="glslide">
+    <pre>
+      min(lines, sphere); // union
+    </pre>
+  </div>
+
+  <div id="slide-24" class="glslide">
+    <pre>
+      max(lines, sphere); // intersection
+    </pre>
+  </div>
+
+  <div id="slide-25" class="glslide">
+    <pre>
+      float plate = sdTorusDashed(pos);
+    </pre>
+  </div>
+
+  <div id="slide-26" class="glslide">
+    <pre>
+      float prezi = min( t3, min(plate, max(lines,sphere) ) );
+    </pre>
+  </div>
+
+  <!-- WebGL content -->
+  <canvas id="canvas"></canvas>
+
+  <!-- Add your site or application content here -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
