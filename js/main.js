@@ -386,7 +386,7 @@ let webGlIsOn = false;
 let activeSlide = 1;
 let slideChangedAt = 0.0;
 let slideChangeDirection = 1;
-const slideCount = 7; // document.getElementsByClassName('slide').length;
+const slideCount = document.getElementsByClassName('slide').length;
 
 // WebGL main loop
 
