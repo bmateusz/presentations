@@ -234,19 +234,22 @@
   </div>
 
   <div id="slide-20" class="glslide">
-    <h1 class="slidebgcolor">Now draw something together</h1>
+    <pre>
+      float sdBox( vec3 p, vec3 b )
+      {
+        vec3 q = abs(p) - b;
+        return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
+      }
+    </pre>
   </div>
 
   <div id="slide-21" class="glslide">
-    <pre>
-      float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
-    </pre>
+    <h1 class="center">Now draw something together</h1>
   </div>
 
   <div id="slide-22" class="glslide">
     <pre>
       float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
-      float t2 = min(t1, sdTorus(pos.yxz, vec2(0.31, 0.01))); // union
     </pre>
   </div>
 
@@ -254,41 +257,48 @@
     <pre>
       float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
       float t2 = min(t1, sdTorus(pos.yxz, vec2(0.31, 0.01))); // union
-      float t3 = min(t2, sdTorus(pos.yxz, vec2(0.34, 0.01))); // union
     </pre>
   </div>
 
   <div id="slide-24" class="glslide">
     <pre>
-      float line = sdBox(pos, vec3(0.01, 0.3, 0.01));
+      float t1 =         sdTorus(pos.yxz, vec2(0.28, 0.01));
+      float t2 = min(t1, sdTorus(pos.yxz, vec2(0.31, 0.01))); // union
+      float t3 = min(t2, sdTorus(pos.yxz, vec2(0.34, 0.01))); // union
     </pre>
   </div>
 
   <div id="slide-25" class="glslide">
     <pre>
-      opRepLim( pos, 0.1, vec3(0.0, 0.0, 2.0), sdBox(pos, vec3(0.01, 0.3, 0.01) );
+      float line = sdBox(pos, vec3(0.01, 0.3, 0.01));
     </pre>
   </div>
 
   <div id="slide-26" class="glslide">
     <pre>
-      min(lines, sphere); // union
+      opRepLim( pos, 0.1, vec3(0.0, 0.0, 2.0), sdBox(pos, vec3(0.01, 0.3, 0.01) );
     </pre>
   </div>
 
   <div id="slide-27" class="glslide">
     <pre>
-      max(lines, sphere); // intersection
+      min(lines, sphere); // union
     </pre>
   </div>
 
   <div id="slide-28" class="glslide">
     <pre>
-      float plate = sdTorusDashed(pos);
+      max(lines, sphere); // intersection
     </pre>
   </div>
 
   <div id="slide-29" class="glslide">
+    <pre>
+      float plate = sdTorusDashed(pos);
+    </pre>
+  </div>
+
+  <div id="slide-30" class="glslide">
     <pre>
       float prezi = min( t3, min(plate, max(lines,sphere) ) );
     </pre>

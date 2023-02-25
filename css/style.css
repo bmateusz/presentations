@@ -33,9 +33,7 @@ td video {
   color: white;
 }
 
-.slidebgcolor {
-  background-color: rgba(204, 239, 255, 0.5);
-  color: black;
+.center {
   text-align:center;
 }
 

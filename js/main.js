@@ -170,31 +170,31 @@ gl.shaderSource(fragmentShader, `
       float plate = sdTorusDashed(pos);
       float prezi = min(t3Inside, plate);
 
-      if (slide >= 18.0) {
+      if (slide >= 19.0) {
         return prezi;
       }
-      if (slide >= 17.0) {
+      if (slide >= 18.0) {
         // return prezi;
         return mix(t3Inside, prezi, fade);
       }
-      if (slide >= 16.0) {
+      if (slide >= 17.0) {
         // return t3Inside;
         return mix(t3LinesBound, t3Inside, fade);
       }
-      if (slide >= 15.0) {
+      if (slide >= 16.0) {
         // return t3LinesBound;
         return mix(t3Lines, t3LinesBound, fade);
       }
-      if (slide >= 14.0) {
+      if (slide >= 15.0) {
         return mix(t3OneLine, t3Lines, fade);
       }
-      if (slide >= 13.0) {
+      if (slide >= 14.0) {
         return mix(t3, t3OneLine, fade);
       }
-      if (slide >= 12.0) {
+      if (slide >= 13.0) {
         return mix(t2, t3, fade);
       }
-      if (slide >= 11.0) {
+      if (slide >= 12.0) {
         return mix(t1, t2, fade);
       }
       return sdTorus(pos.yxz, vec2(0.28 * fade, 0.01)); // t1 with fade
@@ -203,20 +203,23 @@ gl.shaderSource(fragmentShader, `
     float map( in vec3 pos )
     {
         float fade = fract(slide);
-        if (slide > 10.0) {
+        if (slide >= 11.0) {
             return sdPrezi(pos, slide, fade);
         }
         if (slide >= 10.0) {
-            return 10.0;
+            return sdBox(pos, vec3(0.2 * (1.0 - fade)));
         }
         if (slide >= 9.0) {
-            return opRepLimBox(pos,2.0,vec3(100.0 * (1.0 - fade)), vec3(0.2));
+            float r = 1.0 + 100.0 * (1.0 - fade);
+            return opRepLimBox(pos,2.0,vec3(r, 1.0, r), vec3(0.2));
         }
         if (slide >= 8.0) {
-            return opRepLimBox(pos,2.0,vec3(2.0 + 98.0 * fade), vec3(0.2));
+            float r = 2.0 + 98.0 * fade;
+            return opRepLimBox(pos,2.0,vec3(r, 1.0, r), vec3(0.2));
         }
         if (slide >= 7.0) {
-            return opRepLimBox(pos,2.0,vec3(1.0 + fade), vec3(0.2));
+            float r = 1.0 + fade;
+            return opRepLimBox(pos,2.0,vec3(r, 1.0, r), vec3(0.2));
         }
         if (slide >= 6.0) {
             // return sdBox(pos, vec3(0.2));
