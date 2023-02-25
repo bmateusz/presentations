@@ -140,9 +140,9 @@
 
   <div id="slide-12" class="glslide">
     <pre>
-      float sdSphere( vec3 p, float s )
+      float sdSphere( vec3 pos, float radius )
       {
-        return length(p) - s;
+        return length(pos) - radius;
       }
     </pre>
   </div>
