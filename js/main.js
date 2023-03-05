@@ -500,6 +500,9 @@ document.addEventListener('keydown', function (event) {
     leftArrowPressed();
   } else if (event.key === 'ArrowRight') {
     rightArrowPressed();
+  } else if (event.key === 'f') {
+    // request full screen on f
+    document.documentElement.requestFullscreen();
   }
 });
 
